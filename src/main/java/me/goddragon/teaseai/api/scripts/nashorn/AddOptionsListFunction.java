@@ -39,7 +39,7 @@ public class AddOptionsListFunction extends CustomFunction {
                 TeaseLogger.getLogger().log(Level.SEVERE, "Called " + getFunctionName() + " method with invalid panel name " + args[0]);
                 return null;
             } else {
-                PersonalityVariable variable = personality.getVariableHandler().getVariable((String) args[1]);
+                PersonalityVariable<String> variable = personality.getVariableHandler().getVariable((String) args[1], String.class);
                 if (variable == null) {
                     TeaseLogger.getLogger().log(Level.SEVERE, "Called " + getFunctionName() + " method with invalid variable name " + args[1]);
                     return null;

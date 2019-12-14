@@ -38,7 +38,7 @@ public class SetTempDateFunction extends CustomFunction {
         switch (args.length) {
             case 1:
                 if (args[0] instanceof String) {
-                    return personality.getVariableHandler().setVariable((String) args[0], new TeaseDate(Calendar.getInstance().getTime()), true);
+                    return personality.getVariableHandler().setVariable((String) args[0], new TeaseDate(Calendar.getInstance().getTime()), true, TeaseDate.class);
                 }
 
                 break;

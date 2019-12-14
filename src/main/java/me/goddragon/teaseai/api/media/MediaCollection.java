@@ -88,7 +88,7 @@ public class MediaCollection {
 
         //Add all urls so we can check whether an url is already registered
         if (mediaHolder instanceof MediaURL) {
-            if (!registeredURLs.contains(mediaHolder)) {
+            if (!registeredURLs.contains(((MediaURL)mediaHolder).getUrl())) {
                 registeredURLs.add(((MediaURL) mediaHolder).getUrl());
             }
         }

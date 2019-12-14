@@ -2,8 +2,8 @@ package me.goddragon.teaseai.api.statistics;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,7 +12,7 @@ import com.google.gson.JsonSerializer;
 
 public class CustomSerializer implements JsonSerializer<ArrayList<StatisticsBase>> {
 
-    protected static Map<String, Class> map = new TreeMap<String, Class>();
+    protected static Map<String, Class<? extends StatisticsBase>> map = new HashMap<>();
 
     static {
         map.put("Edge", JavaEdge.class);
@@ -31,7 +31,7 @@ public class CustomSerializer implements JsonSerializer<ArrayList<StatisticsBase
         else {
             JsonArray ja = new JsonArray();
             for (StatisticsBase bc : src) {
-                Class c = map.get(bc.isA);
+                Class<? extends StatisticsBase> c = map.get(bc.isA);
                 if (c == null)
                     throw new RuntimeException("Unknow class: " + bc.isA);
                 ja.add(context.serialize(bc, c));

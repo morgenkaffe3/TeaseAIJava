@@ -21,9 +21,9 @@ public class VariableHandler {
     //private File supportedVariablesFile;
 
     private final Personality personality;
-    private HashMap<String, PersonalityVariable> variables = new HashMap<>();
+    private HashMap<String, PersonalityVariable<?>> variables = new HashMap<>();
 
-    private HashMap<String, PersonalityVariable> nonSetSupportedVariables = new HashMap<>();
+    private HashMap<String, PersonalityVariable<?>> nonSetSupportedVariables = new HashMap<>();
 
     public VariableHandler(Personality personality) {
         this.personality = personality;
@@ -85,23 +85,23 @@ public class VariableHandler {
                     }
 
                     if (value != null) {
-                        PersonalityVariable personalityVariable;
+                        PersonalityVariable<?> personalityVariable;
                         if (isSupported) {
-                            personalityVariable = new PersonalityVariable(file.getName().substring(0, file.getName().length() - 4), value, customName, description, personality.getName().getValue());
+                            personalityVariable = new PersonalityVariable<Object>(file.getName().substring(0, file.getName().length() - 4), value, customName, description, personality.getName().getValue());
                         } else {
-                            personalityVariable = new PersonalityVariable(file.getName().substring(0, file.getName().length() - 4), value, personality.getName().getValue());
+                            personalityVariable = new PersonalityVariable<Object>(file.getName().substring(0, file.getName().length() - 4), value, personality.getName().getValue());
                         }
                         if (needsUpdatedToNewSystem) {
                             if (isSupported) {
                                 nonSetSupportedVariables.put(personalityVariable.getConfigName(), personalityVariable);
                             }
                             deleteVariable(personalityVariable.getConfigName());
-                            setVariable(personalityVariable.getConfigName(), personalityVariable.getValue());
+                            setUnknownVariable(personalityVariable.getConfigName(), personalityVariable.getValue());
                         }
 
                         //If we already know about this variable try to restore custom information
                         if (variableExist(personalityVariable.getConfigName())) {
-                            PersonalityVariable existingVariable = getVariable(personalityVariable.getConfigName());
+                            PersonalityVariable<?> existingVariable = getVariable(personalityVariable.getConfigName(), Object.class);
                             //Check whether this variable has any relevant information
                             if (existingVariable.isSupportedByPersonality()) {
                                 personalityVariable.setDescription(existingVariable.getDescription());
@@ -139,29 +139,45 @@ public class VariableHandler {
         }*/
     }
 
-    public Object setVariable(String name, Object value) {
-        return setVariable(name, value, false);
+    // TODO Reduce usage of this method in favor of known calls wherever possible
+    public Object setUnknownVariable(String name, Object value) {
+    	Class<?> type = value.getClass();
+    	return setUnknownVariable(name, type.cast(value), value.getClass(), false);
+    }
+    
+    // TODO Reduce usage of this method in favor of known calls wherever possible
+    public Object setUnknownVariable(String name, Object value, boolean temporary) {
+    	Class<?> type = value.getClass();
+    	return setUnknownVariable(name, type.cast(value), value.getClass(), temporary);
+    }
+    
+    private <T> T setUnknownVariable(String name, Object value, Class<T> type, boolean temporary) {
+    	return setVariable(name, type.cast(value), false, type);
+    }
+    
+    public <T> T setVariable(String name, T value, Class<T> type) {
+        return setVariable(name, value, false, type);
     }
 
-    public Object setVariable(String name, Object value, boolean temporary) {
+    public <T> T setVariable(String name, T value, boolean temporary, Class<T> type) {
         name = name.toLowerCase();
 
-        PersonalityVariable personalityVariable;
+        PersonalityVariable<T> personalityVariable;
         if (variableExist(name)) {
             //Just update the existing value
-            personalityVariable = getVariable(name);
+            personalityVariable = getVariable(name, type);
 
             //Skip setting the variable because we have the same value already stored
-            if ((getVariable(name).getValue().equals(value)) && !(value instanceof TeaseDate) && !(value instanceof Collection)) {
+            if ((getVariable(name, type).getValue().equals(value)) && !(value instanceof TeaseDate) && !(value instanceof Collection)) {
                 return value;
             }
 
             personalityVariable.setValue(value);
         } else {
-            personalityVariable = new PersonalityVariable(name, value, personality.getName().getValue());
+            personalityVariable = new PersonalityVariable<T>(name, value, personality.getName().getValue());
 
             if (nonSetSupportedVariables.containsKey(name)) {
-                PersonalityVariable supportedVariable = nonSetSupportedVariables.get(name);
+                PersonalityVariable<?> supportedVariable = nonSetSupportedVariables.get(name);
                 personalityVariable.setSupportedByPersonality(true);
                 personalityVariable.setCustomName(supportedVariable.getCustomName());
                 personalityVariable.setDescription(supportedVariable.getDescription());
@@ -195,7 +211,7 @@ public class VariableHandler {
                         lines.add(string);
                     }
                 } else {
-                    for (Object object : (Collection) value) {
+                    for (Object object : (Collection<?>) value) {
                         lines.add(object.toString());
                     }
                 }
@@ -229,7 +245,7 @@ public class VariableHandler {
         name = name.toLowerCase();
 
         if (variableExist(name)) {
-            PersonalityVariable personalityVariable = getVariable(name);
+            PersonalityVariable<?> personalityVariable = getVariable(name, Object.class);
 
             //Move the supported variable to the list of not yet set variables
             if (personalityVariable.isSupportedByPersonality()) {
@@ -247,42 +263,48 @@ public class VariableHandler {
         }
     }
 
-    public Object getVariableValue(String name) {
-        name = name.toLowerCase();
-
-        if (!variables.containsKey(name)) {
-            TeaseLogger.getLogger().log(Level.SEVERE, "Variable '" + name + "' does not exist.");
-            return null;
-        }
-
-        return variables.get(name).getValue();
+    public <T> Optional<T> getVariableValue(String name, Class<T> type) {
+        PersonalityVariable<T> variable = this.getVariable(name, type);
+        return Optional.of(variable.getValue());
+        
     }
-
-    public PersonalityVariable getVariable(String name) {
+    
+    @SuppressWarnings("unchecked")
+	private <T> PersonalityVariable<T> cast(PersonalityVariable<?> variable, Class<T> type) {
+    	Object value = variable.getValue();
+        
+        if(!type.isInstance(value)) {
+        	throw new RuntimeException("Invalid type");
+        }
+        
+        return (PersonalityVariable<T>) variable;
+    }
+    
+	public <T> PersonalityVariable<T> getVariable(String name, Class<T> type) {
         name = name.toLowerCase();
 
         if (!variables.containsKey(name)) {
             TeaseLogger.getLogger().log(Level.SEVERE, "Variable '" + name + "' does not exist.");
+            // TODO Optional or exception
             return null;
         }
+        
+        PersonalityVariable<?> variable = variables.get(name);
 
-        return variables.get(name);
+        return cast(variable, type);
     }
 
     public boolean isVariable(String name) {
-        name = name.toLowerCase();
-
-        Object variable = getVariableValue(name);
-        return variable instanceof Boolean && variable.equals(Boolean.TRUE);
+        return getVariableValue(name, Boolean.class).orElse(Boolean.FALSE);
     }
 
     public boolean variableExist(String name) {
         return variables.containsKey(name.toLowerCase());
     }
 
-    public Collection<PersonalityVariable> getTemporaryVariables() {
-        Collection<PersonalityVariable> tempVariables = new HashSet<>();
-        for (PersonalityVariable variable : variables.values()) {
+    public Collection<PersonalityVariable<?>> getTemporaryVariables() {
+        Collection<PersonalityVariable<?>> tempVariables = new HashSet<>();
+        for (PersonalityVariable<?> variable : variables.values()) {
             if (variable.isTemporary()) {
                 tempVariables.add(variable);
             }
@@ -293,7 +315,7 @@ public class VariableHandler {
 
     public void clearTemporaryVariables() {
         //Remove all temporary variables
-        for (PersonalityVariable tempVariable : getTemporaryVariables()) {
+        for (PersonalityVariable<?> tempVariable : getTemporaryVariables()) {
             variables.remove(tempVariable.getConfigName());
         }
     }
@@ -321,19 +343,19 @@ public class VariableHandler {
         variableName = variableName.toLowerCase();
 
         if (variableExist(variableName)) {
-            PersonalityVariable personalityVariable = getVariable(variableName);
+            PersonalityVariable<?> personalityVariable = getVariable(variableName, Object.class);
             personalityVariable.setDescription(description);
             personalityVariable.setCustomName(customName);
             personalityVariable.setSupportedByPersonality(true);
-            PersonalityVariable thisVariable = variables.get(variableName);
+            PersonalityVariable<?> thisVariable = variables.get(variableName);
             if (!thisVariable.isSupportedByPersonality() || !thisVariable.getDescription().equals(description) || thisVariable.getCustomName().equals(customName)) {
                 variables.remove(variableName);
                 nonSetSupportedVariables.put(variableName, personalityVariable);
                 deleteVariable(personalityVariable.getConfigName());
-                setVariable(personalityVariable.getConfigName(), personalityVariable.getValue());
+                setUnknownVariable(personalityVariable.getConfigName(), personalityVariable.getValue());
             }
         } else {
-            PersonalityVariable personalityVariable = new PersonalityVariable(variableName, null, personality.getName().getValue());
+            PersonalityVariable<?> personalityVariable = new PersonalityVariable<>(variableName, null, personality.getName().getValue());
             personalityVariable.setDescription(description);
             personalityVariable.setCustomName(customName);
             personalityVariable.setSupportedByPersonality(true);
@@ -342,6 +364,7 @@ public class VariableHandler {
         }
     }
 
+    // TODO This seems error prone
     public Object getObjectFromString(String string) {
         //Check for boolean first, because anything that is not true will be treated as false otherwise
         if (string.equals("true") || string.equals("false")) {
@@ -376,7 +399,7 @@ public class VariableHandler {
         return string;
     }
 
-    public HashMap<String, PersonalityVariable> getVariables() {
+    public HashMap<String, PersonalityVariable<?>> getVariables() {
         return variables;
     }
 }

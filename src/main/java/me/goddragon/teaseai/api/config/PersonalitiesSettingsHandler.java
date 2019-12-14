@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class PersonalitiesSettingsHandler {
-    private static HashSet<PersonalityVariable> addedComponents;
+    private static HashSet<PersonalityVariable<?>> addedComponents;
     private static PersonalitiesSettingsHandler thisHandler;
     private static ArrayList<PersonalitySettingsHandler> personalitySettingsHandlers;
     private static ArrayList<Tab> personalityTabsToAdd;
@@ -32,7 +32,7 @@ public class PersonalitiesSettingsHandler {
         return newTab;
     }
 
-    public void addGuiComponent(PersonalityVariable comp) {
+    public void addGuiComponent(PersonalityVariable<?> comp) {
         if (addedComponents.contains(comp)) {
             throw new IllegalArgumentException("Gui component added that has already been added. Check if it has been added first!");
         } else {
@@ -40,9 +40,9 @@ public class PersonalitiesSettingsHandler {
         }
     }
 
-    public boolean hasComponent(PersonalityVariable comp) {
+    public boolean hasComponent(PersonalityVariable<?> comp) {
         boolean equivalentVar = false;
-        for (PersonalityVariable var : addedComponents) {
+        for (PersonalityVariable<?> var : addedComponents) {
             if (var.equals(comp)) {
                 equivalentVar = true;
             }

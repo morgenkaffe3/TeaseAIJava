@@ -41,7 +41,7 @@ public class CreateInputFunction extends CustomFunction {
                 }
 
                 for (int x = offset; x < args.length; x++) {
-                    answer.addOption(args[x].toString(), args[x].toString());
+                    Answer.addOption(args[x].toString(), args[x].toString());
                 }
                 break;
         }

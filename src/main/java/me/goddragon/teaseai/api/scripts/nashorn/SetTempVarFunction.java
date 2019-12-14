@@ -36,7 +36,7 @@ public class SetTempVarFunction extends CustomFunction {
         switch (args.length) {
             case 2:
                 if (args[0] instanceof String) {
-                    personality.getVariableHandler().setVariable((String) args[0], args[1], true);
+                    personality.getVariableHandler().setUnknownVariable((String) args[0], args[1], true);
                     return null;
                 }
 

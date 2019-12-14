@@ -4,15 +4,15 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
-public class TextBoxComponent extends VariableBasedComponent {
+public class TextBoxComponent extends VariableBasedComponent<String> {
     private TextField textField;
 
-    public TextBoxComponent(PersonalityVariable variable, String settingString) {
+    public TextBoxComponent(PersonalityVariable<String> variable, String settingString) {
         super(settingString, variable.getDescription(), variable);
         setUp();
     }
 
-    public TextBoxComponent(PersonalityVariable variable, String settingString, String description) {
+    public TextBoxComponent(PersonalityVariable<String> variable, String settingString, String description) {
         super(settingString, description, variable);
         setUp();
     }

@@ -2,7 +2,6 @@ package me.goddragon.teaseai.utils;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -21,7 +20,7 @@ public class ZipUtils {
         try {
             ZipFile zipFile = new ZipFile(inputFile);
 
-            Enumeration zipEntries = zipFile.entries();
+            var zipEntries = zipFile.entries();
 
             if (!outputFolder.exists()) {
                 outputFolder.mkdir();

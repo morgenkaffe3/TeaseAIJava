@@ -28,7 +28,6 @@ public class URLMediaSettings {
         this.settingsController = settingsController;
     }
 
-    @SuppressWarnings("unchecked")
     public void initiate() {
         updateURLList();
 
@@ -265,8 +264,8 @@ public class URLMediaSettings {
 
         for (MediaHolder mediaHolder : TeaseAI.application.getMediaCollection().getMediaHolders().get(MediaType.IMAGE)) {
             if (mediaHolder instanceof MediaURL) {
-                settingsController.urlFilesList.getItems().add(mediaHolder);
-                settingsController.urlFileDragDropList.getItems().add(mediaHolder);
+                settingsController.urlFilesList.getItems().add((MediaURL) mediaHolder);
+                settingsController.urlFileDragDropList.getItems().add((MediaURL) mediaHolder);
             }
         }
     }

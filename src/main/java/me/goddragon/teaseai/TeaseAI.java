@@ -30,8 +30,6 @@ import me.goddragon.teaseai.gui.StartupProgressPane;
 import me.goddragon.teaseai.gui.main.MainGuiController;
 import me.goddragon.teaseai.gui.settings.AppearanceSettings;
 import me.goddragon.teaseai.utils.TeaseLogger;
-import me.goddragon.teaseai.utils.update.JFXUpdater;
-import me.goddragon.teaseai.utils.update.UpdateHandler;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +41,7 @@ import java.util.logging.Level;
 public class TeaseAI extends Application {
 
 
-    public static final String VERSION = "1.2";
+    public static final String VERSION = getBuildVersion();
     public static final String UPDATE_FOLDER = "Updates";
 
     public static TeaseAI application;
@@ -61,7 +59,6 @@ public class TeaseAI extends Application {
     public final ConfigValue CHAT_TEXT_SIZE = new ConfigValue("chatTextSize", Font.getDefault().getSize(), configHandler);
     public final ConfigValue DEFAULT_TYPE_SPEED = new ConfigValue("defaultTypeSpeed", TypeSpeed.MEDIUM, configHandler);
     public final ConfigValue LAST_SELECTED_PERSONALITY = new ConfigValue("lastSelectedPersonality", "null", configHandler);
-    public final ConfigValue TEASE_AI_PROPERTIES_LINK = new ConfigValue("teaseAIPropertiesLink", UpdateHandler.TEASE_AI_PROPERTIES_DEFAULT_LINK, configHandler);
     public final ConfigValue TEXT_TO_SPEECH = new ConfigValue("texttospeech", 2, configHandler);
     public final ConfigValue DEBUG_MODE = new ConfigValue("debugmode", false, configHandler);
     public final ConfigValue ESTIM_ENABLED = new ConfigValue("estimEnabled", false, configHandler);
@@ -85,7 +82,10 @@ public class TeaseAI extends Application {
     public boolean TextToSpeechEnabled = false;
     private boolean responsesDisabled = false;
 
-
+    private static String getBuildVersion(){
+        return TeaseAI.class.getPackage().getImplementationVersion();
+    }
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         if (Main.JAVA_VERSION < 10) {
@@ -110,14 +110,10 @@ public class TeaseAI extends Application {
         //Load config values first
         configHandler.loadConfig();
 
-        UpdateHandler.TEASE_AI_PROPERTIES_DEFAULT_LINK = TEASE_AI_PROPERTIES_LINK.getValue();
-
         ProgressForm progressForm = new ProgressForm("Checking for TAJ update...");
         Task<Void> task = new Task<Void>() {
             @Override
             public Void call() throws InterruptedException {
-                JFXUpdater.getUpdater().checkForUpdate();
-
                 progressForm.setNameSync("Checking personalities...");
                 PersonalityManager.getManager().setProgressUpdate((workDone, totalWork) ->
                         updateProgress(workDone, totalWork));

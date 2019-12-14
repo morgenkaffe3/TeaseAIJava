@@ -13,7 +13,7 @@ import java.util.Collection;
 public abstract class CustomFunction extends AbstractJSObject {
     protected final String functionName;
 
-    protected final Collection<String> functionNames = new ArrayList();
+    protected final Collection<String> functionNames = new ArrayList<>();
 
     public CustomFunction(String... functionName) {
         this.functionName = functionName[0];

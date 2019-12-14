@@ -7,12 +7,12 @@ import javafx.util.converter.DoubleStringConverter;
 
 import java.text.NumberFormat;
 
-public class DoubleSpinnerComponent extends SpinnerComponent {
+public class DoubleSpinnerComponent extends SpinnerComponent<Double> {
     private Spinner<Double> spinner;
     private final double min;
     private final double max;
 
-    public DoubleSpinnerComponent(PersonalityVariable variable, String settingString, double min, double max) {
+    public DoubleSpinnerComponent(PersonalityVariable<Double> variable, String settingString, double min, double max) {
         super(settingString, variable.getDescription(), variable);
         this.min = min;
         this.max = max;
@@ -20,7 +20,7 @@ public class DoubleSpinnerComponent extends SpinnerComponent {
         setUp();
     }
 
-    public DoubleSpinnerComponent(PersonalityVariable variable, String settingString, double min, double max, String description) {
+    public DoubleSpinnerComponent(PersonalityVariable<Double> variable, String settingString, double min, double max, String description) {
         super(settingString, description, variable);
         this.min = min;
         this.max = max;
@@ -29,19 +29,7 @@ public class DoubleSpinnerComponent extends SpinnerComponent {
     }
 
     private void setUp() {
-        double startingValue = min;
-
-        if (variable.getValue() instanceof Integer) {
-            startingValue = (Integer) variable.getValue();
-        } else {
-            try {
-                startingValue = Integer.parseInt((String) variable.getValue());
-            } catch (NumberFormatException ex) {
-                handleMissAssignedValue("Double");
-            }
-        }
-
-        //spinner = new Spinner<>(min, max, startingValue);
+        double startingValue = variable.getValue();
 
         spinner = new Spinner<>(min, max, startingValue);
 

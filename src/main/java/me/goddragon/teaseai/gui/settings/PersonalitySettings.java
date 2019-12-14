@@ -34,9 +34,9 @@ public class PersonalitySettings {
 
         addPersonalityGUIs();
 
-        settingsController.variableListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PersonalityVariable>() {
+        settingsController.variableListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PersonalityVariable<?>>() {
             @Override
-            public void changed(ObservableValue<? extends PersonalityVariable> observable, PersonalityVariable PersonalityVariable, PersonalityVariable newValue) {
+            public void changed(ObservableValue<? extends PersonalityVariable<?>> observable, PersonalityVariable<?> PersonalityVariable, PersonalityVariable<?> newValue) {
                 if (newValue != null) {
                     settingsController.variableValueTextField.setDisable(false);
                     updateVariableData();
@@ -55,11 +55,11 @@ public class PersonalitySettings {
             if (variableHandler == null) {
                 return;
             }
-            PersonalityVariable personalityVariable = getSelectedVariable();
+            PersonalityVariable<?> personalityVariable = getSelectedVariable();
             if (personalityVariable == null) {
                 return;
             }
-            variableHandler.setVariable(personalityVariable.getConfigName(), variableHandler.getObjectFromString(newValue));
+            variableHandler.setUnknownVariable(personalityVariable.getConfigName(), variableHandler.getObjectFromString(newValue));
 
         });
 
@@ -81,7 +81,7 @@ public class PersonalitySettings {
                     needToAdd = false;
                 }
             }
-            for (PersonalityVariable thisVar : variableHandler.getVariables().values()) {
+            for (PersonalityVariable<?> thisVar : variableHandler.getVariables().values()) {
                 if (!PersonalitiesSettingsHandler.getHandler().hasComponent(thisVar)) {
 
                     if (thisVar.isSupportedByPersonality()) {
@@ -94,10 +94,10 @@ public class PersonalitySettings {
                         }
                         if (thisVar.getValue() == Boolean.FALSE || thisVar.getValue() == Boolean.TRUE) {
                             PersonalitiesSettingsHandler.getHandler().addGuiComponent(thisVar);
-                            panel.addCheckBox(thisVar);
+                            panel.addCheckBox((PersonalityVariable<Boolean>) thisVar);
                         } else if (thisVar.getValue() instanceof String) {
                             PersonalitiesSettingsHandler.getHandler().addGuiComponent(thisVar);
-                            panel.addTextBox(thisVar);
+                            panel.addTextBox((PersonalityVariable<String>) thisVar);
                         }
                     }
                 }
@@ -115,7 +115,7 @@ public class PersonalitySettings {
             settingsController.variableListView.getItems().clear();
 
             //ArrayList<PersonalitySettingsPanel> panels = TeaseAI.application.getSession().getActivePersonality().getSettingsHandler().getSettingsPanels();
-            for (PersonalityVariable entry : new TreeMap<>(variableHandler.getVariables()).values()) {
+            for (PersonalityVariable<?> entry : new TreeMap<>(variableHandler.getVariables()).values()) {
                 //TODO: Show and support array variables
                 if (entry.getValue() != null && entry.getValue().getClass().isArray() || entry.getValue() instanceof ScriptObjectMirror && ((ScriptObjectMirror) entry.getValue()).isArray()) {
                     continue;
@@ -146,7 +146,7 @@ public class PersonalitySettings {
     }
 
     public void updateVariableData() {
-        PersonalityVariable variable = getSelectedVariable();
+        PersonalityVariable<?> variable = getSelectedVariable();
 
         if (variable != null && variableHandler != null) {
             Object object = variable.getValue();
@@ -163,9 +163,9 @@ public class PersonalitySettings {
         }
     }
 
-    private PersonalityVariable getSelectedVariable() {
+    private PersonalityVariable<?> getSelectedVariable() {
         if (settingsController.variableListView.getSelectionModel().getSelectedItems().size() == 1) {
-            return (PersonalityVariable) settingsController.variableListView.getSelectionModel().getSelectedItem();
+            return settingsController.variableListView.getSelectionModel().getSelectedItem();
         }
 
         return null;

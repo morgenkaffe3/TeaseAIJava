@@ -170,7 +170,7 @@ public class ContactSettings {
 
     public void updateContactList() {
         int currentSelected = settingsController.domContactListView.getSelectionModel().getSelectedIndex();
-        ListView listView = settingsController.domContactListView;
+        ListView<ChatParticipant> listView = settingsController.domContactListView;
         listView.getItems().clear();
 
         for (ChatParticipant chatParticipant : ChatHandler.getHandler().getParticipants()) {

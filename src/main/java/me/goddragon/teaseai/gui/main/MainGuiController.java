@@ -81,7 +81,7 @@ public class MainGuiController {
     public ScrollPane chatScrollPane;
 
     @FXML
-    private ChoiceBox personalityChoiceBox;
+    private ChoiceBox<Personality> personalityChoiceBox;
 
     @FXML
     private Button startChatButton;
@@ -439,7 +439,7 @@ public class MainGuiController {
         return chatScrollPane;
     }
 
-    public ChoiceBox getPersonalityChoiceBox() {
+    public ChoiceBox<Personality> getPersonalityChoiceBox() {
         return personalityChoiceBox;
     }
 

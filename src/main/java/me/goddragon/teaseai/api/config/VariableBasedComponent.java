@@ -4,26 +4,26 @@ import me.goddragon.teaseai.utils.TeaseLogger;
 
 import java.util.logging.Level;
 
-public abstract class VariableBasedComponent extends GUISettingComponent {
+public abstract class VariableBasedComponent<T> extends GUISettingComponent {
 
-    protected final PersonalityVariable variable;
+    protected final PersonalityVariable<T> variable;
 
-    public VariableBasedComponent(String settingString, int columnNumber, PersonalityVariable variable) {
+    public VariableBasedComponent(String settingString, int columnNumber, PersonalityVariable<T> variable) {
         super(settingString, columnNumber);
         this.variable = variable;
     }
 
-    public VariableBasedComponent(String settingString, PersonalityVariable variable) {
+    public VariableBasedComponent(String settingString, PersonalityVariable<T> variable) {
         super(settingString);
         this.variable = variable;
     }
 
-    public VariableBasedComponent(String settingString, String description, int columnNumber, PersonalityVariable variable) {
+    public VariableBasedComponent(String settingString, String description, int columnNumber, PersonalityVariable<T> variable) {
         super(settingString, description, columnNumber);
         this.variable = variable;
     }
 
-    public VariableBasedComponent(String settingString, String description, PersonalityVariable variable) {
+    public VariableBasedComponent(String settingString, String description, PersonalityVariable<T> variable) {
         super(settingString, description);
         this.variable = variable;
     }

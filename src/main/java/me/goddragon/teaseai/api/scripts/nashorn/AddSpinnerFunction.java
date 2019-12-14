@@ -57,7 +57,7 @@ public class AddSpinnerFunction extends CustomFunction {
                 TeaseLogger.getLogger().log(Level.SEVERE, "Called " + getFunctionName() + " method with invalid panel name " + args[0]);
                 return null;
             } else {
-                PersonalityVariable variable = personality.getVariableHandler().getVariable((String) args[1]);
+                PersonalityVariable<?> variable = personality.getVariableHandler().getVariable((String) args[1], Object.class);
 
                 if (variable == null) {
                     TeaseLogger.getLogger().log(Level.SEVERE, "Called " + getFunctionName() + " method with invalid variable name " + args[1]);
@@ -88,7 +88,7 @@ public class AddSpinnerFunction extends CustomFunction {
                                 TeaseLogger.getLogger().log(Level.SEVERE, "Failed to add custom setting. '" + args[3] + "' is not a double.");
                             }
 
-                            panel.addDoubleSpinner(variable, min, max);
+                            panel.addDoubleSpinner((PersonalityVariable<Double>) variable, min, max);
                         } else if (spinnerType == SpinnerComponent.INTEGER_TYPE) {
                             int min = 0;
                             int max = 0;
@@ -105,7 +105,7 @@ public class AddSpinnerFunction extends CustomFunction {
                                 TeaseLogger.getLogger().log(Level.SEVERE, "Failed to add custom setting. '" + args[3] + "' is not an integer.");
                             }
 
-                            panel.addIntegerSpinner(variable, min, max);
+                            panel.addIntegerSpinner((PersonalityVariable<Integer>) variable, min, max);
                         }
                     }
                 }

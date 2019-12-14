@@ -9,17 +9,17 @@ import me.goddragon.teaseai.utils.TeaseLogger;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class OptionsListComponent extends VariableBasedComponent {
+public class OptionsListComponent extends VariableBasedComponent<String> {
     private ArrayList<String> options;
     private ChoiceBox<String> choiceBox;
 
-    public OptionsListComponent(PersonalityVariable variable, String settingString, ArrayList<String> options) {
+    public OptionsListComponent(PersonalityVariable<String> variable, String settingString, ArrayList<String> options) {
         super(settingString, variable.getDescription(), variable);
         this.options = options;
         setUp();
     }
 
-    public OptionsListComponent(PersonalityVariable variable, String settingString, ArrayList<String> options, String description) {
+    public OptionsListComponent(PersonalityVariable<String> variable, String settingString, ArrayList<String> options, String description) {
         super(settingString, description, variable);
         this.options = options;
         setUp();

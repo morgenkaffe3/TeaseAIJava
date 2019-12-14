@@ -52,23 +52,23 @@ public class PersonalitySettingsPanel {
         setUp();
     }
 
-    public void addCheckBox(PersonalityVariable variable) {
+    public void addCheckBox(PersonalityVariable<Boolean> variable) {
         components.add(new CheckBoxComponent(variable, variable.getCustomName()));
     }
 
-    public void addTextBox(PersonalityVariable variable) {
+    public void addTextBox(PersonalityVariable<String> variable) {
         components.add(new TextBoxComponent(variable, variable.getCustomName()));
     }
 
-    public void addOptionsList(PersonalityVariable variable, ArrayList<String> options) {
+    public void addOptionsList(PersonalityVariable<String> variable, ArrayList<String> options) {
         components.add(new OptionsListComponent(variable, variable.getCustomName(), options));
     }
 
-    public void addIntegerSpinner(PersonalityVariable variable, int min, int max) {
+    public void addIntegerSpinner(PersonalityVariable<Integer> variable, int min, int max) {
         components.add(new IntegerSpinnerComponent(variable, variable.getCustomName(), min, max));
     }
 
-    public void addDoubleSpinner(PersonalityVariable variable, double min, double max) {
+    public void addDoubleSpinner(PersonalityVariable<Double> variable, double min, double max) {
         components.add(new DoubleSpinnerComponent(variable, variable.getCustomName(), min, max));
     }
 

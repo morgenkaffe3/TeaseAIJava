@@ -7,12 +7,12 @@ import javafx.util.converter.IntegerStringConverter;
 
 import java.text.NumberFormat;
 
-public class IntegerSpinnerComponent extends SpinnerComponent {
+public class IntegerSpinnerComponent extends SpinnerComponent<Integer> {
     private Spinner<Integer> spinner;
     private final int min;
     private final int max;
 
-    public IntegerSpinnerComponent(PersonalityVariable variable, String settingString, int min, int max) {
+    public IntegerSpinnerComponent(PersonalityVariable<Integer> variable, String settingString, int min, int max) {
         super(settingString, variable.getDescription(), variable);
         this.min = min;
         this.max = max;
@@ -20,7 +20,7 @@ public class IntegerSpinnerComponent extends SpinnerComponent {
         setUp();
     }
 
-    public IntegerSpinnerComponent(PersonalityVariable variable, String settingString, int min, int max, String description) {
+    public IntegerSpinnerComponent(PersonalityVariable<Integer> variable, String settingString, int min, int max, String description) {
         super(settingString, description, variable);
         this.min = min;
         this.max = max;
@@ -29,19 +29,7 @@ public class IntegerSpinnerComponent extends SpinnerComponent {
     }
 
     private void setUp() {
-        int startingValue = min;
-
-        if (variable.getValue() instanceof Integer) {
-            startingValue = (Integer) variable.getValue();
-        } else {
-            try {
-                startingValue = Integer.parseInt((String) variable.getValue());
-            } catch (NumberFormatException ex) {
-                handleMissAssignedValue("Integer");
-            }
-        }
-
-        //spinner = new Spinner<>(min, max, startingValue);
+        int startingValue = variable.getValue();
 
         spinner = new Spinner<>(min, max, startingValue);
 

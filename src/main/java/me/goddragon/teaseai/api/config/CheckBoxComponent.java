@@ -4,16 +4,16 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBox;
 
-public class CheckBoxComponent extends VariableBasedComponent {
+public class CheckBoxComponent extends VariableBasedComponent<Boolean> {
 
     private CheckBox checkBox;
 
-    public CheckBoxComponent(PersonalityVariable variable, String settingString) {
+    public CheckBoxComponent(PersonalityVariable<Boolean> variable, String settingString) {
         super(settingString, variable.getDescription(), variable);
         setUp();
     }
 
-    public CheckBoxComponent(PersonalityVariable variable, String settingString, String description) {
+    public CheckBoxComponent(PersonalityVariable<Boolean> variable, String settingString, String description) {
         super(settingString, description, variable);
         setUp();
     }

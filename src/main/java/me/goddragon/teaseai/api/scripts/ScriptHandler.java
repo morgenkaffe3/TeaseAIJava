@@ -135,7 +135,7 @@ public class ScriptHandler {
 
         this.currentPersonality = personality;
 
-        currentPersonality.getVariableHandler().setVariable("personalityVersion", currentPersonality.getVersion().getValue(), true);
+        currentPersonality.getVariableHandler().setVariable("personalityVersion", currentPersonality.getVersion().getValue(), true, String.class);
 
         VocabularyHandler.getHandler().loadVocabulariesFromPersonality(personality);
         ResponseHandler.getHandler().loadResponsesFromPersonality(personality);

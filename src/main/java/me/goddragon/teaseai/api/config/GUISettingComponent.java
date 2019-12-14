@@ -11,29 +11,34 @@ public abstract class GUISettingComponent {
     protected Label settingLabel;
     protected String description;
     protected Node setting;
-    protected int columnNumber = -1;
+    protected final int columnNumber;
 
+    private static final int DEFAULT_COLUMN_NUMBER = -1;
 
     public GUISettingComponent(String settingString, int columnNumber) {
-        this(settingString);
-        this.columnNumber = columnNumber;
+        this(settingString, null, columnNumber);
     }
 
     public GUISettingComponent(String settingString) {
-        settingString += ":";
-        settingLabel = new Label(settingString);
+        this(settingString, null);
     }
 
     public GUISettingComponent(String settingString, String description, int columnNumber) {
-        this(settingString, description);
+     
+        settingString += ":";
+        settingLabel = new Label(settingString);
+        
+        this.description = description;
+        
+        if(description != null) {
+        	settingLabel.setTooltip(makeBubble(new Tooltip(this.description)));
+        }
+        
         this.columnNumber = columnNumber;
     }
 
     public GUISettingComponent(String settingString, String description) {
-        this(settingString);
-        this.description = description;
-        //Tooltip.install(settingLabel, makeBubble(new Tooltip(this.description)));
-        settingLabel.setTooltip(makeBubble(new Tooltip(this.description)));
+        this(settingString, description, DEFAULT_COLUMN_NUMBER);
     }
 
     private Tooltip makeBubble(Tooltip tooltip) {

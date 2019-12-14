@@ -36,7 +36,7 @@ public class SetVarFunction extends CustomFunction {
         switch (args.length) {
             case 2:
                 if (args[0] instanceof String) {
-                    return personality.getVariableHandler().setVariable((String) args[0], args[1]);
+                    return personality.getVariableHandler().setUnknownVariable((String) args[0], args[1]);
                 }
 
                 break;

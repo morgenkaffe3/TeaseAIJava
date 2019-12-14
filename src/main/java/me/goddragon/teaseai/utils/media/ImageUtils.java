@@ -5,8 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import me.goddragon.teaseai.utils.TeaseLogger;
-import me.goddragon.teaseai.utils.libraries.imagescaling.ResampleFilters;
-import me.goddragon.teaseai.utils.libraries.imagescaling.ResampleOp;
+import com.twelvemonkeys.image.ResampleOp;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -67,8 +66,7 @@ public class ImageUtils {
                 }
             }
             if (needsScaling) {
-                ResampleOp resizeOp = new ResampleOp(newWidth, newHeight);
-                resizeOp.setFilter(ResampleFilters.getLanczos3Filter());
+                ResampleOp resizeOp = new ResampleOp(newWidth, newHeight, ResampleOp.FILTER_LANCZOS);
                 scaledImage = resizeOp.filter(originalImage, null);
             } else {
                 scaledImage = originalImage;

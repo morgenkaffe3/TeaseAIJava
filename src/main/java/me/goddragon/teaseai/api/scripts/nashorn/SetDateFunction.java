@@ -38,13 +38,13 @@ public class SetDateFunction extends CustomFunction {
         switch (args.length) {
             case 1:
                 if (args[0] instanceof String) {
-                    return personality.getVariableHandler().setVariable((String) args[0], new TeaseDate(Calendar.getInstance().getTime()));
+                    return personality.getVariableHandler().setVariable((String) args[0], new TeaseDate(Calendar.getInstance().getTime()), TeaseDate.class);
                 }
 
                 break;
             case 2:
                 if (args[0] instanceof String && args[1] instanceof TeaseDate) {
-                    return personality.getVariableHandler().setVariable((String) args[0], args[1]);
+                    return personality.getVariableHandler().setVariable((String) args[0], (TeaseDate)args[1], TeaseDate.class);
                 }
 
                 break;

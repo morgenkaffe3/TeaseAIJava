@@ -12,9 +12,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import me.goddragon.teaseai.TeaseAI;
+import me.goddragon.teaseai.api.chat.ChatParticipant;
 import me.goddragon.teaseai.api.chat.TypeSpeed;
 import me.goddragon.teaseai.api.config.PersonalitiesSettingsHandler;
+import me.goddragon.teaseai.api.config.PersonalityVariable;
+import me.goddragon.teaseai.api.media.MediaFetishType;
+import me.goddragon.teaseai.api.media.MediaHolder;
+import me.goddragon.teaseai.api.media.MediaURL;
 import me.goddragon.teaseai.gui.main.MainGuiController;
+import me.goddragon.teaseai.gui.themes.Theme;
 
 import java.io.IOException;
 
@@ -45,7 +51,7 @@ public class SettingsController {
     public ComboBox<TypeSpeed> defaultTypeSpeedComboBox;
 
     @FXML
-    public ListView urlFilesList;
+    public ListView<MediaURL> urlFilesList;
 
     @FXML
     public TextField addURLTextField;
@@ -72,13 +78,13 @@ public class SettingsController {
     public CheckBox useURLForTease;
 
     @FXML
-    public ListView urlFileDragDropList;
+    public ListView<MediaURL> urlFileDragDropList;
 
     @FXML
-    public ListView assignedURLFileList;
+    public ListView<MediaURL> assignedURLFileList;
 
     @FXML
-    public ListView urlFetishTypeList;
+    public ListView<MediaFetishType> urlFetishTypeList;
 
     @FXML
     public GridPane moveMediaURLGridPane;
@@ -91,7 +97,7 @@ public class SettingsController {
 
     //Media Files and Folders
     @FXML
-    public ListView mediaFetishTypeList;
+    public ListView<MediaFetishType> mediaFetishTypeList;
 
     @FXML
     public Button addImagePathButton;
@@ -103,7 +109,7 @@ public class SettingsController {
     public Button addImagePathFileChooserButton;
 
     @FXML
-    public ListView imagePathListView;
+    public ListView<MediaHolder> imagePathListView;
 
     @FXML
     public Button addVideoPathButton;
@@ -115,11 +121,11 @@ public class SettingsController {
     public Button addVideoPathFileChooserButton;
 
     @FXML
-    public ListView videoPathListView;
+    public ListView<MediaHolder> videoPathListView;
 
     //Contacts
     @FXML
-    public ListView domContactListView;
+    public ListView<ChatParticipant> domContactListView;
 
     @FXML
     public ImageView domContactImageView;
@@ -141,7 +147,7 @@ public class SettingsController {
 
     //Debug
     @FXML
-    public ListView variableListView;
+    public ListView<PersonalityVariable<?>> variableListView;
 
     @FXML
     public TextField variableValueTextField;
@@ -191,7 +197,7 @@ public class SettingsController {
 
     //Appearance
     @FXML
-    public ComboBox selectedThemeComboBox;
+    public ComboBox<Theme> selectedThemeComboBox;
 
     @FXML
     public GridPane appearanceMainGridPane;

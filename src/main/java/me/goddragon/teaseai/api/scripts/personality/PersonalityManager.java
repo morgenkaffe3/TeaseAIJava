@@ -40,7 +40,7 @@ public class PersonalityManager {
     }
 
     public void addPersonalitiesToGUI() {
-        ChoiceBox choiceBox = TeaseAI.application.getController().getPersonalityChoiceBox();
+        ChoiceBox<Personality> choiceBox = TeaseAI.application.getController().getPersonalityChoiceBox();
         choiceBox.getItems().clear();
 
         for (Personality personality : personalities) {

@@ -6,7 +6,7 @@ package me.goddragon.teaseai.api.config;
 public class PersonalityVariable<T> {
 
     private final String configName;
-    private Object value;
+    private T value;
 
     //The personality this variable belongs to
     private String personalityName;
@@ -15,13 +15,11 @@ public class PersonalityVariable<T> {
     private boolean supportedByPersonality = false;
     private boolean temporary = false;
 
-    public PersonalityVariable(String configName, Object value, String personalityName) {
-        this.configName = configName.toLowerCase();
-        this.value = value;
-        this.personalityName = personalityName;
+    public PersonalityVariable(String configName, T value, String personalityName) {
+        this(configName, value, null, null, personalityName);
     }
 
-    public PersonalityVariable(String configName, Object value, String customName, String description, String personalityName) {
+    public PersonalityVariable(String configName, T value, String customName, String description, String personalityName) {
         this.configName = configName.toLowerCase();
         this.value = value;
         this.customName = customName;
@@ -34,11 +32,11 @@ public class PersonalityVariable<T> {
         return configName;
     }
 
-    public Object getValue() {
+    public T getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(T value) {
         this.value = value;
     }
 
@@ -71,7 +69,7 @@ public class PersonalityVariable<T> {
     }
 
     public boolean isTemporary() {
-        return temporary;
+        return this.temporary;
     }
 
     @Override
@@ -79,7 +77,15 @@ public class PersonalityVariable<T> {
         return customName != null ? customName : configName;
     }
 
-    public boolean equals(PersonalityVariable variable) {
+    @Override
+    public boolean equals(Object obj) {
+    	if(obj instanceof PersonalityVariable) {
+    		return this.equals((PersonalityVariable<?>)obj);
+    	}
+    	return false;
+    }
+    
+    public boolean equals(PersonalityVariable<?> variable) {
         return configName.equals(variable.getConfigName()) && customName.equals(variable.getCustomName()) && personalityName.equals(variable.getPersonalityString());
     }
 

@@ -22,6 +22,15 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media', 'javafx.swing' ]
 }
 
+project.version = gitVersion()
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'TeaseAI Java',
+                   'Implementation-Version': project.version
+    }
+}
+
 repositories {
     jcenter()
     
@@ -50,6 +59,8 @@ dependencies {
 	
 	implementation 'com.github.GodDragoner:EstimAPI:master-SNAPSHOT'
 	
+	implementation group: 'com.twelvemonkeys.common', name: 'common-image', version: '3.4.2'
+	
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
@@ -65,8 +76,6 @@ application {
     // Define the main class for the application.
     mainClassName = 'me.goddragon.teaseai.Main'
 }
-
-version gitVersion()
 
 publishing {
     publications {

@@ -153,7 +153,7 @@ public class URLGenreSettings {
             public void handle(MouseEvent event) {
                 MediaFetishType mediaFetishType = settingsController.mediaSettings.getSelectedURLMediaFetish();
 
-                for (Object mediaURL : settingsController.urlFileDragDropList.getSelectionModel().getSelectedItems()) {
+                for (MediaURL mediaURL : settingsController.urlFileDragDropList.getSelectionModel().getSelectedItems()) {
                     if (mediaURL != null && !settingsController.assignedURLFileList.getItems().contains(mediaURL)) {
                         settingsController.assignedURLFileList.getItems().add(mediaURL);
 
@@ -187,7 +187,7 @@ public class URLGenreSettings {
         if (mediaFetishType != null) {
             for (MediaHolder mediaHolder : TeaseAI.application.getMediaCollection().getMediaHolders(mediaFetishType, MediaType.IMAGE)) {
                 if (mediaHolder instanceof MediaURL) {
-                    settingsController.assignedURLFileList.getItems().add(mediaHolder);
+                    settingsController.assignedURLFileList.getItems().add((MediaURL) mediaHolder);
                 }
             }
         }
