@@ -6,10 +6,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import me.goddragon.teaseai.TeaseAI;
-import me.goddragon.teaseai.utils.FileUtils;
 import me.goddragon.teaseai.utils.TeaseLogger;
-import me.goddragon.teaseai.utils.media.AnimatedGif;
-import me.goddragon.teaseai.utils.media.Animation;
 import me.goddragon.teaseai.utils.media.ImageUtils;
 
 import java.io.*;
@@ -30,7 +27,6 @@ public class MediaHandler {
     private HashMap<URI, MediaPlayer> playingAudioClips = new HashMap<>();
 
     private MediaPlayer currentVideoPlayer = null;
-    private Animation currentAnimation = null;
     private boolean imagesLocked = false;
 
     private String currentImageURL;
@@ -135,17 +131,7 @@ public class MediaHandler {
                 mediaView.setOpacity(0);
                 imageView.setOpacity(1);
 
-                //Stop any current image animation that might be running before displaying a new picture
-                stopCurrentAnimation();
-
-                if (FileUtils.getExtension(file).equalsIgnoreCase("gif")) {
-                    currentAnimation = new AnimatedGif(file.toURI().toString());
-                    currentAnimation.setCycleCount(Integer.MAX_VALUE);
-                    currentAnimation.play(imageView);
-
-                } else {
-                    ImageUtils.setImageInView(file, imageView);
-                }
+                ImageUtils.setImageInView(file, imageView);
             }
         });
 
@@ -156,15 +142,7 @@ public class MediaHandler {
 
     private void removePicture() {
         ImageView imageView = TeaseAI.application.getController().getImageView();
-        stopCurrentAnimation();
         imageView.setImage(null);
-    }
-
-    private void stopCurrentAnimation() {
-        if (currentAnimation != null) {
-            currentAnimation.stop();
-            currentAnimation = null;
-        }
     }
 
     private MediaPlayer getAudioPlayer(File file) {

@@ -62,7 +62,14 @@ dependencies {
 	implementation group: 'com.twelvemonkeys.common', name: 'common-image', version: '3.4.2'
 	
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+    testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }
 
 configurations.all {
@@ -85,6 +92,23 @@ publishing {
             from components.java
         }
     }
+}
+
+task('debug', type: Exec, dependsOn: 'run') {
+	group = 'application'
+	description = 'Start with debug server'
+	
+	// Runs before dependencies
+	doFirst {
+	tasks.withType(JavaExec) {
+		debugOptions {
+			enabled = true
+       		port = 5566
+			server = true
+       		suspend = true
+		}
+	}
+	}
 }
 
 apply plugin: 'me.goddragon.updater' 
